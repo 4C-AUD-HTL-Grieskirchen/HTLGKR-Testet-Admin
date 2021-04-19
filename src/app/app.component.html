@@ -1,0 +1,17 @@
+<div id="barcodeScannerSize">
+  <barcode-scanner-livestream
+    type="code_39"
+    (valueChanges)="onValueChanges($event)"
+    (started)="(onStarted)"
+  ></barcode-scanner-livestream>
+</div>
+
+<div id="stringCodeBox">
+  <label for="barcodeValue_">Code: </label>
+  <input id="barcodeValue_" [(ngModel)]="barcodeValue">
+  <button type="button" (click)="onSend(barcodeValue)">Send</button>
+  <div [hidden]="!barcodeValue">
+    {{ barcodeValue }}
+  </div>
+
+</div>

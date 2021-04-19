@@ -1,0 +1,9 @@
+#barcodeScannerSize{
+  width: 600px;
+  height: 450px;
+}
+
+#stringCodeBox{
+  margin: 20px;
+  position: relative;
+}
