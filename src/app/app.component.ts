@@ -19,20 +19,18 @@ export class AppComponent implements AfterViewInit{
     this.barcodeScanner.start();
   }
 
-  // tslint:disable-next-line:typedef
-  onValueChanges(result){
+  onValueChanges(result): void{
     this.barcodeValue = result.codeResult.code;
   }
 
-  // tslint:disable-next-line:typedef
-  onStarted(started){
+   onStarted(started): void{
     console.log(started);
   }
 
   constructor(private afs: AngularFirestore) { }
 
-  // tslint:disable-next-line:typedef
-  onSend(str: string) {
+  onSend(str: string): void {
+    console.log('sending code');
     this.afs.firestore.doc('Barcodes/' + str).set({
         key: str,
         text: str
@@ -40,7 +38,7 @@ export class AppComponent implements AfterViewInit{
       {
         merge: true
       }).then(() => {
-   console.log('Uiiii ich hab grad ' + str + ' auf Firestore geladen :3');
+   console.log(`Code ${this.barcodeValue} sent to firestore`);
     }).catch(error => {
       console.error(error);
     });
