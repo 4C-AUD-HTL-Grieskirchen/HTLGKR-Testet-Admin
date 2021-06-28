@@ -31,17 +31,10 @@ export class AppComponent implements AfterViewInit{
 
   onSend(str: string): void {
     console.log('sending code');
-    this.afs.firestore.doc('Barcodes/' + str).set({
-        key: str,
-        text: str
-      },
-      {
-        merge: true
-      }).then(() => {
-   console.log(`Code ${this.barcodeValue} sent to firestore`);
-    }).catch(error => {
-      console.error(error);
-    });
+
+    console.log(this.afs.firestore.doc(`Registrations/${str}`).get().then(doc => console.log(doc.data())));
+
+   
   }
 }
 
