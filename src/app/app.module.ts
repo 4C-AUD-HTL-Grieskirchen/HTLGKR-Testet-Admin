@@ -9,7 +9,7 @@ import {environment} from '../environments/environment';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
-
+import {TableModule} from 'primeng/table';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,8 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
     BrowserModule, BarcodeScannerLivestreamModule, FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    ZXingScannerModule
+    ZXingScannerModule,
+    TableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

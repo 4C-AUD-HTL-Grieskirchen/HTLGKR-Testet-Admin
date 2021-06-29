@@ -1,11 +1,32 @@
 <div id="stringCodeBox">
 
-  <zxing-scanner style="width: 75%" (scanSuccess)="onCodeResult($event)"></zxing-scanner>
+  <zxing-scanner style="width: 50%" (scanSuccess)="onCodeResult($event)"></zxing-scanner>
 
+  <p-table [value]="registrations">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Email</th>
+        <th>Plz</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-registration>
+      <tr>
+        <td>{{registration.firstname}}</td>
+        <td>{{registration.lastname}}</td>
+        <td>{{registration.email}}</td>
+        <td>{{registration.plz}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
   <section class="results" *ngIf="qrResultString" [(ngModel)]="qrResultString">
 
     <button mat-icon-button (click)="clearResult()">&times;</button>
   </section>
+
+
 
 
   <input id="barcodeValue_" [(ngModel)]="qrResultString">
