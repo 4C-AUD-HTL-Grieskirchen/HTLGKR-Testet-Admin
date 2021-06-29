@@ -8,7 +8,7 @@ import {FormsModule} from '@angular/forms';
 import {environment} from '../environments/environment';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
-
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 
 @NgModule({
@@ -18,7 +18,8 @@ import {AngularFirestoreModule} from '@angular/fire/firestore';
   imports: [
     BrowserModule, BarcodeScannerLivestreamModule, FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    ZXingScannerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

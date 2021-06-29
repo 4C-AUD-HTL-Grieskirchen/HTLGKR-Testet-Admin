@@ -1,17 +1,14 @@
-<div id="barcodeScannerSize">
-  <barcode-scanner-livestream
-    type="code_128"
-    (valueChanges)="onValueChanges($event)"
-    (started)="onStarted($event)"
-  ></barcode-scanner-livestream>
-</div>
-
 <div id="stringCodeBox">
-  <label for="barcodeValue_">Code: </label>
-  <input id="barcodeValue_" [(ngModel)]="barcodeValue">
-  <button type="button" (click)="onSend(barcodeValue)">Send</button>
-  <div [hidden]="!barcodeValue">
-    {{ barcodeValue }}
-  </div>
+
+  <zxing-scanner style="width: 75%" (scanSuccess)="onCodeResult($event)"></zxing-scanner>
+
+  <section class="results" *ngIf="qrResultString" [(ngModel)]="qrResultString">
+
+    <button mat-icon-button (click)="clearResult()">&times;</button>
+  </section>
+
+
+  <input id="barcodeValue_" [(ngModel)]="qrResultString">
+  <button type="button" (click)="onSend(qrResultString)">Send</button>
 
 </div>

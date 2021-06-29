@@ -1,6 +1,10 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {BarcodeScannerLivestreamComponent} from 'ngx-barcode-scanner';
 import {AngularFirestore} from '@angular/fire/firestore';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+
+
+
 
 
 @Component({
@@ -12,8 +16,9 @@ export class AppComponent implements AfterViewInit{
   title = 'BarcodeScannerAngular';
   @ViewChild(BarcodeScannerLivestreamComponent)
   barcodeScanner: BarcodeScannerLivestreamComponent;
-
+  qrResultString: string;
   barcodeValue;
+
 
   ngAfterViewInit(): void {
     this.barcodeScanner.start();
@@ -32,9 +37,22 @@ export class AppComponent implements AfterViewInit{
   onSend(str: string): void {
     console.log('sending code');
 
-    console.log(this.afs.firestore.doc(`Registrations/${str}`).get().then(doc => console.log(doc.data())));
+    const dataFromFirebase = this.afs.firestore.doc(`Registrations/${str}`).get().then(doc => console.log(doc.data()));
+    const registration: Registration = JSON.parse(JSON.stringify(dataFromFirebase));
 
-   
+    console.log(registration.firstname);
+    console.log(registration.lastname);
+  }
+  clearResult(): void {
+    this.qrResultString = null;
+  }
+  onCodeResult(resultString: string) {
+    this.qrResultString = resultString;
   }
 }
 
+
+class Registration {
+  firstname: string;
+  lastname: string;
+}
