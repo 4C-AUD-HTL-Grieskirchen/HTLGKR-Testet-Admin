@@ -1,6 +1,16 @@
 <div id="stringCodeBox">
 
-  <zxing-scanner style="width: 50%" (scanSuccess)="onCodeResult($event)"></zxing-scanner>
+  <p-confirmDialog #cd [style]="{width: '50vw'}">
+    <ng-template pTemplate="header">
+      <h3>Auswahl bestätigen</h3>
+    </ng-template>
+  </p-confirmDialog>
+
+  <zxing-scanner style="width: 20%" (scanSuccess)="onCodeResult($event)"></zxing-scanner>
+  <input id="barcodeValue_" [(ngModel)]="qrResultString" pInputText>
+  <p-button (click)="sendCode(qrResultString)">Send</p-button>
+
+
 
   <p-table [value]="registrations">
     <ng-template pTemplate="header">
@@ -9,27 +19,37 @@
         <th>Lastname</th>
         <th>Email</th>
         <th>Plz</th>
+        <th>Code Scanned</th>
+        <th>Set Result</th>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-registration>
-      <tr>
+      <tr #tableRow>
         <td>{{registration.firstname}}</td>
         <td>{{registration.lastname}}</td>
         <td>{{registration.email}}</td>
         <td>{{registration.plz}}</td>
+        <td>{{registration.codeScanned}}</td>
+        <td>
+          <div class="p-row">
+            <div class="col-1">
+              <button type="button" class="p-button-danger" pButton icon="pi pi-exclamation-triangle" label="Positive"
+                      (click)="setResult('positive',registration)"></button>
+            </div>
+            <div class="col-1">
+              <button type="button" class="p-button-success" pButton icon="pi pi-check" label="Negative"
+                      (click)="setResult('negative',registration)"></button>
+            </div>
+            <div class="col-1">
+              <button type="button" class="p-button-secondary" pButton icon="pi pi-question" label="Invalid"
+                      (click)="setResult('invalid',registration)"></button>
+            </div>
+          </div>
       </tr>
     </ng-template>
   </p-table>
-  <section class="results" *ngIf="qrResultString" [(ngModel)]="qrResultString">
-
-    <button mat-icon-button (click)="clearResult()">&times;</button>
-  </section>
 
 
-
-
-  <input id="barcodeValue_" [(ngModel)]="qrResultString">
-  <button type="button" (click)="onSend(qrResultString)">Send</button>
 
 </div>

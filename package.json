@@ -28,6 +28,7 @@
     "firebase": "^8.4.1",
     "jsqr": "^1.4.0",
     "ngx-barcode-scanner": "^0.2.0",
+    "primeicons": "^4.1.0",
     "primeng": "^11.4.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

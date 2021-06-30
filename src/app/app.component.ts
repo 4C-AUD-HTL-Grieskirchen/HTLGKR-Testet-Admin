@@ -1,8 +1,7 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {BarcodeScannerLivestreamComponent} from 'ngx-barcode-scanner';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {ZXingScannerModule} from '@zxing/ngx-scanner';
-import {Observable} from 'rxjs';
+import {ConfirmationService} from 'primeng/api';
 
 
 @Component({
@@ -26,27 +25,52 @@ export class AppComponent implements AfterViewInit {
     console.log(started);
   }
 
-  constructor(private afs: AngularFirestore) {
-    afs.collection<Registration>('Registrations').valueChanges().subscribe(data => this.registrations = data);
+  constructor(private afs: AngularFirestore, private confirmationService: ConfirmationService) {
+    afs.firestore.collection('Registrations').get()
+      .then((querySnapshot) => querySnapshot.forEach(doc => doc.ref.update({
+        result: 'unknown',
+      })));
+    afs.collection<Registration>('Registrations', ref => ref.where('codeScanned', '==', true)
+      .where('result', '==', 'unknown')
+    )
+      .valueChanges({idField: 'id'})
+      .subscribe(data => {
+        this.registrations = data;
+      });
 
   }
 
-  onSend(str: string): void {
-    console.log('sending code');
-
-    const dataFromFirebase = this.afs.firestore.doc(`Registrations/${str}`).get().then(doc => console.log(doc.data()));
-    const registration: Registration = JSON.parse(JSON.stringify(dataFromFirebase));
-
-    console.log(registration.firstname);
-    console.log(registration.lastname);
-  }
-
-  clearResult(): void {
-    this.qrResultString = null;
-  }
 
   onCodeResult(resultString: string): void {
+
     this.qrResultString = resultString;
+    this.sendCode(resultString);
+  }
+
+  setResult(result: string, registration: any): void {
+    this.confirmationService.confirm({
+      message: `Sind Sie sicher dass Sie ${result.toUpperCase()} eintragen wollen?`,
+      accept: () => {
+        registration.result = result;
+        this.afs.doc<Registration>(`Registrations/${registration.id}`).ref.update({result});
+        this.confirmationService.close();
+      },
+      reject: () => {
+        this.confirmationService.close();
+        return;
+      }
+    });
+  }
+
+  openStatusDialog(): void {
+    this.confirmationService.confirm({
+      message: 'Welches Ergebnis hatte der Test?',
+    });
+  }
+
+  sendCode(code: string): void {
+    const registration = this.afs.doc<Registration>(`Registrations/${code}`);
+    registration.update({codeScanned: true}).then(response => console.log(response));
   }
 }
 
@@ -54,4 +78,6 @@ export class AppComponent implements AfterViewInit {
 class Registration {
   firstname: string;
   lastname: string;
+  codeScanned: boolean;
+  positive = 'invalid';
 }
