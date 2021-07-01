@@ -26,10 +26,10 @@ export class AppComponent implements AfterViewInit {
   }
 
   constructor(private afs: AngularFirestore, private confirmationService: ConfirmationService) {
-    afs.firestore.collection('Registrations').get()
+   /* afs.firestore.collection('Registrations').get()
       .then((querySnapshot) => querySnapshot.forEach(doc => doc.ref.update({
         result: 'unknown',
-      })));
+      })));*/
     afs.collection<Registration>('Registrations', ref => ref.where('codeScanned', '==', true)
       .where('result', '==', 'unknown')
     )
